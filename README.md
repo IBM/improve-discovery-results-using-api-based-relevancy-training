@@ -227,7 +227,7 @@ Ensure that the training status shows values as shown in below image.
 
 Once the training is completed, you can run a sample query to get the list of documents. Make a note of results. A sample query and it's results are as in following image.
 
-![Before Improvisation](./images/Before-Improvisation.png)
+![Before Improvisation](./images/before-improvisation.png)
 
 
 
