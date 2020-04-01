@@ -13,7 +13,7 @@ Relevancy training in Watson Discovery can be done in two ways as follows:
 - Using Tooling. See [Improving result relevance with the tooling](https://cloud.ibm.com/docs/discovery?topic=discovery-improving-result-relevance-with-the-tooling) for more details. 
 - Using APIs. Watson Discovery provides APIs for performing Relevance Training. 
 
-If your Watson Discovery instance has fairly large number of questions for which relevance training needs to be done, then the tooling method might take much longer compared to the programattic (using APIs) way. Also using APIs one need not be online connected to Discovery instance via browser.
+If your Watson Discovery instance has fairly large number of questions for which relevance training needs to be done, then the tooling method might take much longer compared to the programattic (using APIs) way. Also, for using APIs, one need not be online connected to Discovery instance via browser.
 
 This Code Pattern shows, with an example, how relevancy training can be achieved using APIs.
 
@@ -38,14 +38,19 @@ This Code Pattern shows, with an example, how relevancy training can be achieved
 
 - [IBM Cloud Account](https://cloud.ibm.com/)
 - [Python](https://www.python.org/downloads/) installed on your PC
-- Basic familiarity of IBM Cloud and Discovery service.
+- Basic familiarity of [IBM Cloud](https://cloud.ibm.com/) and [Discovery service](https://cloud.ibm.com/catalog/services/discovery).
 
 # Steps
 
 Follow these steps to setup and run this code pattern. The steps are described in detail below.
 
 1. [Create Discovery service instance](#1-create-discovery-service-instance)
-2. [Get the code](#2-get-the-code)
+2. [Annotate Documents](#2-annotate-documents)
+3. [Get the Code](#3-get-the-code)
+4. [Relevance Training](#4-relevance-training)
+5. [Conclusion](#5-conclusion)
+
+
 
 ## 1. Create Discovery service instance
 
@@ -63,7 +68,9 @@ If you already have an instance of Discovery service instance, then skip this st
 
   ![API Key](./images/apikey.png)
 
-## 2. Perform SDU
+
+
+## 2. Annotate Documents
 
 Smart Document Understanding (SDU) trains IBM Watson™ Discovery to extract custom fields in your documents. Customizing how your documents are indexed into Discovery improves the answers that your application returns.
 
@@ -87,13 +94,17 @@ With SDU, you annotate fields within your documents to train custom conversion m
 
   
 
--  Click `Configure Data` on the top right corner.
+- Click `Configure Data` on the top right corner.
 
   ![Configure Data](./images/configure-data.png)
+
+  
 
 - Annotate various fields in the document. Especially the text and subtitles. Subtitles will be used to split the document. Refer [this demontration video](https://www.youtube.com/watch?v=onxgZ6uCZ9o) for understanding SDU, if required. Following are some of the annotations done for the document ingested.
 
   ![Annotation](./images/annotation.gif)
+
+  
 
 - When annotation is done for all the documents, click `Apply changes to collection`. When asked to upload document, upload the same document again.
 
@@ -101,9 +112,11 @@ With SDU, you annotate fields within your documents to train custom conversion m
 
   ![Manage Fields](./images/manage-fields.png)
 
+  
+
 - Again, click `Apply changes to collection`. When asked to upload document, upload the same document again.
 
-- After a few minutes, the total number of documents should be changed from 1 to anything more than 100 depending on the subtitles that you have marked.
+- After a few minutes, the total number of documents should be changed from 1 to anything about more than 100 depending on the subtitles that you have marked.
 
   Now that the documents are ingested, we can do natural language query and get results. Querying can be done either using the web interface or using APIs. Refer [Discovery APIs](https://cloud.ibm.com/apidocs/discovery/discovery) for more details on APIs.
   
@@ -113,9 +126,9 @@ With SDU, you annotate fields within your documents to train custom conversion m
 
 - Clone the repo using the below command on a terminal window.
 
-```python
-git clone git@github.com:IBM/improve-discovery-results-using-api-based-relevancy-training.git
-```
+	```
+	git clone git@github.com:IBM/improve-discovery-results-using-api-based-relevancy-training.git
+	```
 
 - Change directory to the cloned repo using the command
 
@@ -125,36 +138,38 @@ git clone git@github.com:IBM/improve-discovery-results-using-api-based-relevancy
 
   And open the file named `DiscoveryDetails.py` in edit mode.
 
-- Edit file named `DiscoveryDetails.py` and update `apikey`, `collection_id`, `environment_id` which were noted down in previous steps. Save the file.
+- Edit file named `DiscoveryDetails.py` and update `apikey`, `collection_id`, `environment_id` which were noted down in earlier steps. Save the file.
 
   
 
-## 4. Relevance scoring in Discovery
+## 4. Relevance Training
 
 As mentioned previously, in this code pattern we will send queries to Discovery using APIs. The purpose of this code pattern is to show how you can achieve relevance training for a large set of questions. On a high level, following are the steps
 
-1. Get results/passages for all the natural language queries. 
-2. Assign/update relevance scores.
-3. Update Discovery with new relevance scores.
+1. Get results/documents for all the natural language queries. 
+2. Assign/update relevance scores to documents.
+3. Train Discovery with new relevance scores of documents.
 
 ### 4.1 Get results for all the natural language queries
 
-All the Natural Language Queries should be placed in a file. In our case the questions are placed in `<Repo Parent Directory/Questions.txt>`. Ensure that this file has atleast 49 questions, to cater to minimum queries required by Discovery for training purose. Python file `Query.py` uses this file to send queries to Discovery. The results of queries are saved in a file named `training_file.tsv`. It is a `.tsv (Tab Separated Value)` file in the following format:
+Let us begin with querying discovery and getting results without any additional training. For this make a list of questions based on the dataset/document ingested into Discovery. Ensure that you have atleast 49 questions, to cater to minimum queries required by Discovery for training purose.
 
-![TSV Format](./images/tsv-format.png)
+Place all the questions in a text file. Each question must be line separated. In our case the questions are placed in `<Repo Parent Directory>/Questions.txt`. 
 
-- First column of each row is natural language query
-- Next columns, in sets of 3 columns, are document_id of passage, the passage text and a blank tab respectively for each of the passages of query results.
-
-Run the following command
-
+Let us train Discovery with all these questions/queries. Run the following command
 ```
 python Query.py
 ```
 
-The command sends all the queries to Discovery and the results are stored in  `training_file.tsv` file. Ensure that this file is created and data is populated. 
+This command queries Discovery for every question appearing in `Questions.txt` file. The command might take a few minutes depending on the number of questions. Results of queries are saved in a file named `<Repo Parent Directory>/training_file.tsv`. It is a `.tsv (Tab Separated Value)` file in the following format:
 
-Discovery takes few minutes to train the model, based on queries made. 
+![TSV Format](./images/tsv-format.png)
+
+- First column of each row is natural language query
+- Next columns, in sets of 3 columns, are document_id of document, text of document and a blank tab respectively for each of the passages of query results.
+- The blank tab is left as a filler to enter relevancy score for the document_id, appearing 2 columns back in the row.
+
+Ensure that  `training_file.tsv` is created and has required data. 
 
 
 ### 4.2 Check training status
@@ -217,15 +232,11 @@ Muralidhars-MacBook-Pro-2:improve-discovery-results-using-api-based-relevancy-tr
 
 ```
 
-
-
 Ensure that the training status shows values as shown in below image.
 
 ![](./images/discovery-training-status.png) 
 
-
-
-Once the training is completed, you can run a sample query to get the list of documents. Make a note of results. A sample query and it's results are as in following image.
+Once the training is completed, you can run a sample query to get the list of documents. Make a note of results. A sample query and it's results are as in following image. Later we will mark these documents/results as relevant or not relevant and we will see that if the documents retrieved for this query is as per we marked them.
 
 ![Before Improvisation](./images/before-improvisation.png)
 
@@ -253,15 +264,23 @@ We will do this by running the following command from cloned repo's parent folde
 python RelevanceTraining.py
 ```
 
-You might see `ApiException` entries. You can safely ignore these errors since these errors occur because the training examples were already available. The code will internally delete those training examples and update with new ones.
+>  You might see `ApiException (Error Code: 409)` entries in the logs. You can safely ignore these errors since these errors occur because the training examples were already available. The code will internally delete those training examples and update with new ones.
 
-When the command completes the run, we have updated the training with relevant results for our queries.
+When the command completes the run, it would have updated the training with relevant results for our queries.
 
 Note that the the service uses machine-learning Watson techniques to find signals in your content and questions. The service then reorders query results to display the most relevant results at the top. As you add more training data, the service instance becomes more accurate and sophisticated in the ordering of results it returns.
 
-Now, check the status of training again, as earlier done in section [Check training status](#42-check-training-status). Below image shows results for the same query that we checked before performing relevancy training. Note that the documents marked as relevant have been prioritised in the result for the query.
+Now, check the status of training again, as earlier done in section [Check training status](#42-check-training-status). `Processing` field should be false, meaning that the processing is completed. 
+
+Now check if the documents retrieved for queries are as per relevance scores updated. We will run the same query that we had run earlier and see if the documents marked as relevant have been prioritised in the result for the query. We will notice that documents marked with higher relevance scores are prioritised. Note that this may not be always true since Watson uses training data to learn patterns and to generalize, not to memorize individual training queries. If that is the case then more training might help learn the model and get desired output.
 
 ![After Improvisation](./images/after-improvisation.png)
+
+
+
+## 5. Conclusion
+
+You can train Discovery to improve the relevance of query results for your particular organization or subject area. For a fewer set of queries it can be achieved using Watson Discovery tooling. However, for a large set of queries, it is better to use APIs to achieve this. In this code pattern we used Watson discovery collection with the default training and Python code to to send requests and process responses. We queried, with about 147 queries. The responses were recorded is a TSV file. Then the responses were marked with relevancy score. Discovery collection was trained again with new relevancy scores and we saw the impact on how results were prioritized.
 
 
 
