@@ -17,22 +17,16 @@ If your Watson Discovery instance has fairly large number of questions for which
 
 This Code Pattern shows, with an example, how relevancy training can be achieved using APIs.
 
-
-
 # Flow
 
 <img src="./images/architecture.png" alt="Architecture" /> 
 
-
-
 1. Client application sends natural language query for each of the queries that needs relevance training.
-2. Watson Discovery return passages for each of the natural language queries made.
+2. Watson Discovery return passages for each of the natural language query made.
 3. The client application saves queries and corresponding passages in a TSV file, on local machine.
-4. User adds weightages to passages and saves the file.
-5. Client application then uses updated weightages to invoke Discovery relevance training APIs.
-6. Client can then query Discovery service to retrieve improved results for queries.
-
-
+4. User assings relevancy scores to documents and saves the file.
+5. Client application invokes APIs to update Discovery collection training using updated relevancy scores.
+6. Client queries to get improved results.
 
 # Pre-requsites
 
@@ -45,16 +39,18 @@ This Code Pattern shows, with an example, how relevancy training can be achieved
 Follow these steps to setup and run this code pattern. The steps are described in detail below.
 
 1. [Create Discovery service instance](#1-create-discovery-service-instance)
+
 2. [Annotate Documents](#2-annotate-documents)
+
 3. [Get the Code](#3-get-the-code)
+
 4. [Relevance Training](#4-relevance-training)
+
 5. [Conclusion](#5-conclusion)
 
-
+   
 
 ## 1. Create Discovery service instance
-
-If you already have an instance of Discovery service instance, then skip this step and jump to [step 2](#2-get-the-code).
 
 - Login to your [IBM Cloud](https://cloud.ibm.com/) account
 
@@ -64,7 +60,7 @@ If you already have an instance of Discovery service instance, then skip this st
 
 - Under `Create` tab, select a region, select a plan, and edit `service name`, if required. Then click `Create`. This should create Watson Discovery Service instance.
 
-- Once the Discovery service instance is created, make a note of it's apices. These credentails are to be used when send requests to Discovery service.
+- Once the Discovery service instance is created, make a note of it's apikey. These credentails are to be used when send requests to Discovery service.
 
   ![API Key](./images/apikey.png)
 
@@ -84,7 +80,7 @@ With SDU, you annotate fields within your documents to train custom conversion m
 
 - Enter `Collection name` and click `Create`. Collection should be created. 
 
-- Upload the document under docs folder of the cloned [repository](https://github.com/IBM/improve-discovery-results-using-api-based-relevancy-training). Wait till the document is ingested. 
+- Upload the document under docs folder of the cloned [repository](https://github.com/IBM/improve-discovery-results-using-api-based-relevancy-training). Wait till the document is ingested.
 
 - Navigate to the discovery instance that you created and imported the data to. Login to `IBM Cloud` -> `Resource list` -> `Services` -> `Discovery instance` -> `Launch Watson Discovery`.
 
@@ -281,8 +277,6 @@ Now check if the documents retrieved for queries are as per relevance scores upd
 ## 5. Conclusion
 
 You can train Discovery to improve the relevance of query results for your particular organization or subject area. For a fewer set of queries it can be achieved using Watson Discovery tooling. However, for a large set of queries, it is better to use APIs to achieve this. In this code pattern we used Watson discovery collection with the default training and Python code to to send requests and process responses. We queried, with about 147 queries. The responses were recorded is a TSV file. Then the responses were marked with relevancy score. Discovery collection was trained again with new relevancy scores and we saw the impact on how results were prioritized.
-
-
 
 # Related Links
 
