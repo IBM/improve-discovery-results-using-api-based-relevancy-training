@@ -1,7 +1,6 @@
 import json
 import csv
 import requests
-import ibm_boto3
 import DiscoveryDetails as dt
 
 output_file = open("./training_file.tsv", "w")

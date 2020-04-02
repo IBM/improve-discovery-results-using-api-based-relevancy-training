@@ -30,8 +30,8 @@ This Code Pattern shows, with an example, how relevancy training can be achieved
 
 # Pre-requsites
 
-- [IBM Cloud Account](https://cloud.ibm.com/)
-- [Python](https://www.python.org/downloads/) installed on your PC
+- [IBM Cloud Account](https://cloud.ibm.com/).
+- [Python](https://www.python.org/downloads/), version preferably > 3.7,  installed on your PC.
 - Basic familiarity of [IBM Cloud](https://cloud.ibm.com/) and [Discovery service](https://cloud.ibm.com/catalog/services/discovery).
 
 # Steps
@@ -151,6 +151,12 @@ As mentioned previously, in this code pattern we will send queries to Discovery 
 Let us begin with querying discovery and getting results without any additional training. For this make a list of questions based on the dataset/document ingested into Discovery. Ensure that you have atleast 49 questions, to cater to minimum queries required by Discovery for training purose.
 
 Place all the questions in a text file. Each question must be line separated. In our case the questions are placed in `<Repo Parent Directory>/Questions.txt`. 
+
+Install required python modules by running following commands.
+
+```py
+pip install -r requirements.txt
+```
 
 Let us train Discovery with all these questions/queries. Run the following command
 ```
