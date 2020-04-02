@@ -155,7 +155,7 @@ Place all the questions in a text file. Each question must be line separated. In
 Install required python modules by running following commands.
 
 ```py
-pip install -r requirements.txt
+pip3 install -r requirements.txt
 ```
 
 Let us train Discovery with all these questions/queries. Run the following command
