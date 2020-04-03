@@ -7,14 +7,12 @@ import DiscoveryDetails as dt
 from ibm_cloud_sdk_core.api_exception import ApiException
 
 def delete_and_add_example(query_id, document_id, relevance):
-    try:
-        deleteResult = dt.discovery.delete_training_example(dt.environment_id, dt.collection_id, query_id, document_id)
-        print("Delete result = " + json.dumps(deleteResult.get_result()))
-        add_example_result = dt.discovery.create_training_example(dt.environment_id, dt.collection_id, query_id, document_id=document_id, cross_reference=None, relevance=relevance)
-        print("add_example_result = " + json.dumps(add_example_result.get_result()))
-    except Exception as ee1:
-        print(type(ee1))
-        print("Exception ee1 = " + ee1.message() )
+    deleteResult = dt.discovery.delete_training_example(dt.environment_id, dt.collection_id, query_id, document_id)
+    print("Delete result = " + json.dumps(deleteResult.get_result()))
+    add_example_result = dt.discovery.create_training_example(dt.environment_id, dt.collection_id, query_id, document_id=document_id, cross_reference=None, relevance=relevance)
+    print("add_example_result = " + json.dumps(add_example_result.get_result()))
+        
+
 
 def create_training_example(query_id, document_id, relevance):
     print("---")
@@ -46,11 +44,15 @@ def training_post(training_obj):
                 print("query_id = " + str(query_id))
                 
                 for example in training_obj["examples"]:
-                    print("Calling create_training_example")
                     create_training_example(query_id, example["document_id"], example["relevance"])
-
+            else:
+                print("ApiException occurred in training_post when calling discovery.add_training_data api with error code = " + str(apiE.code))
+                print(apiE)
+                raise Exception(apiE)
         except Exception as e:
-            print("Exception occured. ----------- " + print(e))
+            print("Exception occurred in training_post when calling discovery.add_training_data api")
+            print(e)
+            raise Exception(e)
 
 #open the training file and create new training data objects
 with open("./training_file.tsv",'r') as training_doc:
