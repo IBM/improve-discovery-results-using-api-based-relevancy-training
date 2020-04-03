@@ -49,12 +49,8 @@ def training_post(training_obj):
                     print("Calling create_training_example")
                     create_training_example(query_id, example["document_id"], example["relevance"])
 
-        except KeyError as keyError:
-            print("KeyError-----------")
-        except ApiException as ae:
-            print("ApiException----------")
         except Exception as e:
-            print("Exception-----------")
+            print("Exception occured. ----------- " + print(e))
 
 #open the training file and create new training data objects
 with open("./training_file.tsv",'r') as training_doc:

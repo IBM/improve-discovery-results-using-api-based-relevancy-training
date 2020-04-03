@@ -7,7 +7,7 @@ from ibm_cloud_sdk_core.api_exception import ApiException
 apikey = 'xxxxxxxxxxxx-xxxxxxxxxxxx-xxxxxxxxxx'
 collection_id = 'xxxxxxx-xxxx-xxxx-xxxx-xxxxxxxx'
 environment_id = 'xxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxx'
-
+url = 'https://api.us-south.discovery.watson.cloud.ibm.com/instances/bcxxxxx-xxxx-xxxx-xxxx-xxxxxxxx824'
 
 authenticator = IAMAuthenticator(apikey)
 auth = HTTPBasicAuth('apikey', apikey)
@@ -20,6 +20,4 @@ headers = {
     'content-type': "application/json"
     }
     
-discovery.set_service_url('https://gateway.watsonplatform.net/discovery/api')
-
-training_path = "https://gateway.watsonplatform.net/discovery/api/v1/environments/" + environment_id + "/collections/" + collection_id  + "/training_data?version=2019-04-30"
+discovery.set_service_url(url)

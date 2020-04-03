@@ -60,9 +60,9 @@ Follow these steps to setup and run this code pattern. The steps are described i
 
 - Under `Create` tab, select a region, select a plan, and edit `service name`, if required. Then click `Create`. This should create Watson Discovery Service instance.
 
-- Once the Discovery service instance is created, make a note of it's apikey. These credentails are to be used when send requests to Discovery service.
+- Once the Discovery service instance is created, make a note of it's `apikey` and `url`. These credentails are to be used when we send requests to Discovery service.
 
-  ![API Key](./images/apikey.png)
+  ![API Key](./images/apikey-and-url.png)
 
 
 
@@ -134,7 +134,7 @@ With SDU, you annotate fields within your documents to train custom conversion m
 
   And open the file named `DiscoveryDetails.py` in edit mode.
 
-- Edit file named `DiscoveryDetails.py` and update `apikey`, `collection_id`, `environment_id` which were noted down in earlier steps. Save the file.
+- Edit file named `DiscoveryDetails.py` and update `apikey`, `url`, `collection_id`, `environment_id` which were noted down in earlier steps. Save the file.
 
   
 
