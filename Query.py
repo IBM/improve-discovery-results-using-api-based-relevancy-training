@@ -24,8 +24,11 @@ try:
             for resultDoc in result.get_result()["results"]:
                 id = resultDoc["id"]
                 text = resultDoc["text"]
-                if( len(text) < 10 ):
-                    continue
+            #for resultDoc in result.get_result()["passages"]:
+                #id = resultDoc["document_id"]
+                #text = resultDoc["passage_text"]
+                if( len(text) > 500 ):
+                    text = text[:500] 
                 result_list.extend([id,text,' ']) #leave a space to enter a relevance label for each doc 
 
             #write the row to the file 

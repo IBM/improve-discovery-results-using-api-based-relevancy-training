@@ -173,8 +173,42 @@ This command queries Discovery for every question appearing in `Questions.txt` f
 
 Ensure that  `training_file.tsv` is created and has required data. 
 
+Before we further train Discovery, let us make a note of the results that Discovery provides, by default. For this run a sample natural language query in Discovery tool. A sample query and it's results are as in following image. Later we will mark these documents/results as relevant or not relevant and we will see that if the documents retrieved for this query is as per we marked them.
 
-### 4.2 Check training status
+![Before Improvisation](./images/before-improvisation.png)
+
+
+### 4.2 Assign/update relevance scores
+
+**Relevance Score**: The relevance score for each training query must be a non-negative integer, for example `0` to represent *not relevant*, `1` to represent *somewhat relevant*, and `2` to represent *highly relevant*. However, for maximum flexibility, the service accepts non-negative integers between `0` and `100` for advanced users experimenting with different scoring schemes. Regardless of the range you use, the largest integer in the set of training queries indicates maximum relevance.
+
+Open the `training_file.tsv` file using an editor such as excel for a better visual representation. For each query and document id, update relevance score. Provide relevance for each passage or else by default relevance score of 0 (not relevant) is assumed. Save the file when all the queries and document_ids are assigned relevant scores.
+
+Few sample rows after relevance scores are assigned looks as below
+
+![Sample Score](./images/sample-weights-assigned.png)
+
+
+
+### 4.3 Update Discovery with new relevance scores
+
+Now that the query results are assigned with relevance scores, we need to update these scores back to Discovery collection for updating the training data.
+
+We will do this by running the following command from cloned repo's parent folder.
+
+```
+python RelevanceTraining.py
+```
+
+>  You might see `ApiException (Error Code: 409)` entries in the logs. You can safely ignore these errors since these errors occur because the training examples were already available. The code will internally delete those training examples and update with new ones.
+
+When the command completes the run, it would have updated the training with relevant results for our queries.
+
+Note that the the service uses machine-learning Watson techniques to find signals in your content and questions. The service then reorders query results to display the most relevant results at the top. As you add more training data, the service instance becomes more accurate and sophisticated in the ordering of results it returns.
+
+
+
+### 4.4 Check Training Status
 
 Next, we need to check status of Discovery training. Run the below command to check the status.
 
@@ -238,41 +272,7 @@ Ensure that the training status shows values as shown in below image.
 
 ![](./images/discovery-training-status.png) 
 
-Once the training is completed, you can run a sample query to get the list of documents. Make a note of results. A sample query and it's results are as in following image. Later we will mark these documents/results as relevant or not relevant and we will see that if the documents retrieved for this query is as per we marked them.
-
-![Before Improvisation](./images/before-improvisation.png)
-
-
-
-### 4.3 Assign/update relevance scores
-
-**Relevance Score**: The relevance score for each training query must be a non-negative integer, for example `0` to represent *not relevant*, `1` to represent *somewhat relevant*, and `2` to represent *highly relevant*. However, for maximum flexibility, the service accepts non-negative integers between `0` and `100` for advanced users experimenting with different scoring schemes. Regardless of the range you use, the largest integer in the set of training queries indicates maximum relevance.
-
-Open the `training_file.tsv` file using an editor such as excel for a better visual representation. For each query and document id, update relevance score. Provide relevance for each passage or else by default relevance score of 0 (not relevant) is assumed. Save the file when all the queries and document_ids are assigned relevant scores.
-
-Few sample rows after relevance scores are assigned looks as below
-
-![Sample Score](./images/sample-weights-assigned.png)
-
-
-
-### 4.4 Update Discovery with new relevance scores
-
-Now that the query results are assigned with relevance scores, we need to update these scores back to Discovery collection for updating the training data.
-
-We will do this by running the following command from cloned repo's parent folder.
-
-```
-python RelevanceTraining.py
-```
-
->  You might see `ApiException (Error Code: 409)` entries in the logs. You can safely ignore these errors since these errors occur because the training examples were already available. The code will internally delete those training examples and update with new ones.
-
-When the command completes the run, it would have updated the training with relevant results for our queries.
-
-Note that the the service uses machine-learning Watson techniques to find signals in your content and questions. The service then reorders query results to display the most relevant results at the top. As you add more training data, the service instance becomes more accurate and sophisticated in the ordering of results it returns.
-
-Now, check the status of training again, as earlier done in section [Check training status](#42-check-training-status). `Processing` field should be false, meaning that the processing is completed. 
+Ensure that `Processing` field should be `false`, `available`field should be `true`, meaning that the processing is completed. 
 
 Now check if the documents retrieved for queries are as per relevance scores updated. We will run the same query that we had run earlier and see if the documents marked as relevant have been prioritised in the result for the query. We will notice that documents marked with higher relevance scores are prioritised. Note that this may not be always true since Watson uses training data to learn patterns and to generalize, not to memorize individual training queries. If that is the case then more training might help learn the model and get desired output.
 
