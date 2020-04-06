@@ -4,7 +4,7 @@
 
 Developers use the IBM Watson Discovery service to rapidly add a cognitive, search, and content analytics engine to applications. With that engine, they can identify patterns, trends, and insights from unstructured data that drive better decision making. With Watson Discovery, you can *ingest* (convert, enrich, clean, and normalize), store, and query data to extract actionable insights. In order to search and query, you need content that is injected and persisted in collections. You can learn more about developing applications with Watson Discovery by studying the [Cognitive discovery reference architecture](https://www.ibm.com/cloud/architecture/architectures/cognitiveDiscoveryDomain). 
 
-Relevancy Training is a powerful capability in Watson Discovery Service that can improve search accuracy if the right approach is taken. You can train Discovery to improve the relevance of query results for your particular organization or subject area. When you provide a Discovery instance with *training data*, the service uses machine-learning Watson techniques to find signals in your content and questions. The service then reorders query results to display the most relevant results at the top. As you add more training data, the service instance becomes more accurate and sophisticated in the ordering of results it returns.
+Relevancy Training is a powerful capability in Watson Discovery Service that can improve search accuracy if the right approach is taken. You can train Discovery to improve the relevance of query results for your particular organisation or subject area. When you provide a Discovery instance with *training data*, the service uses machine-learning Watson techniques to find signals in your content and questions. The service then reorders query results to display the most relevant results at the top. As you add more training data, the service instance becomes more accurate and sophisticated in the ordering of results it returns.
 
 Relevancy training is optional; if the results of your queries meet your needs, no further training is necessary. For an overview of building use cases for training, see the blog post [How to get the most out of Relevancy Training](https://developer.ibm.com/dwblog/2017/get-relevancy-training/).
 
@@ -24,25 +24,26 @@ This Code Pattern shows, with an example, how relevancy training can be achieved
 1. Client application sends natural language query for each of the queries that needs relevance training.
 2. Watson Discovery return passages for each of the natural language query made.
 3. The client application saves queries and corresponding passages in a TSV file, on local machine.
-4. User assings relevancy scores to documents and saves the file.
-5. Client application invokes APIs to update Discovery collection training using updated relevancy scores.
-6. Client queries to get improved results.
+4. User assigns relevancy scores to documents and saves the file.
+5. Application accesses file with updated relevancy scores.
+6. Client application invokes APIs to update Discovery collection training using updated relevancy scores.
+7. Client queries again to get improved results.
 
 # Pre-requsites
 
 - [IBM Cloud Account](https://cloud.ibm.com/).
 - [Python](https://www.python.org/downloads/), version preferably > 3.7,  installed on your PC.
-- Basic familiarity of [IBM Cloud](https://cloud.ibm.com/) and [Discovery service](https://cloud.ibm.com/catalog/services/discovery).
+- Basic familiarity of [IBM Cloud](https://cloud.ibm.com/) and [Discovery service](https://cloud.ibm.com/docs/discovery?topic=discovery-getting-started).
 
 # Steps
 
 Follow these steps to setup and run this code pattern. The steps are described in detail below.
 
-1. [Create Discovery service instance](#1-create-discovery-service-instance)
+1. [Create Discovery service instance on IBM Cloud](#1-create-discovery-service-instance-on-ibm-cloud)
 
-2. [Annotate Documents](#2-annotate-documents)
+2. [Get the Code](#2-get-the-code)
 
-3. [Get the Code](#3-get-the-code)
+3. [Annotate Documents](#3-annotate-documents)
 
 4. [Relevance Training](#4-relevance-training)
 
@@ -50,7 +51,7 @@ Follow these steps to setup and run this code pattern. The steps are described i
 
    
 
-## 1. Create Discovery service instance
+## 1. Create Discovery service instance on IBM Cloud
 
 - Login to your [IBM Cloud](https://cloud.ibm.com/) account
 
@@ -66,30 +67,45 @@ Follow these steps to setup and run this code pattern. The steps are described i
 
 
 
-## 2. Annotate Documents
+## 2. Get the code 
 
-Smart Document Understanding (SDU) trains IBM Watson™ Discovery to extract custom fields in your documents. Customizing how your documents are indexed into Discovery improves the answers that your application returns.
+- Clone the repo using the below command on a terminal window.
+
+  ```
+  git clone git@github.com:IBM/improve-discovery-results-using-api-based-relevancy-training.git
+  ```
+
+- Change directory to the cloned repo using the command
+
+  ```
+  cd improve-discovery-results-using-api-based-relevancy-training
+  ```
+
+  And open the file named `DiscoveryDetails.py` in edit mode.
+
+- Edit file named `DiscoveryDetails.py` and update `apikey`, `url`, `collection_id`, `environment_id` which were noted down in earlier steps. Save the file.
+
+## 3. Annotate Documents
+
+Smart Document Understanding (SDU) trains IBM Watson Discovery to extract custom fields in your documents. Customising how your documents are indexed into Discovery improves the answers that your application returns.
 
 With SDU, you annotate fields within your documents to train custom conversion models. As you annotate, Watson is learning and starts to predict annotations. SDU models can be exported and used on other collections.
 
-- Go to IBM Cloud Dasboard and navigate to the newly created Discovery service under `Services` and click on it. 
+- Go to IBM Cloud Dashboard -> Discovery Service -> Manage -> Launch Watson Discovery 
 
-- Click on `Launch Watson Discovery`
-
-- On the Watson Discovery page, click `Upload your own data` . If there is any confirmation message to `Setup with current plan` then click on it. 
+- On the Watson Discovery page, click `Upload your own data` . If there is any confirmation message to `Setup with current plan` then click `OK` and `Continue`. 
 
 - Enter `Collection name` and click `Create`. Collection should be created. 
 
-- Upload the document under docs folder of the cloned [repository](https://github.com/IBM/improve-discovery-results-using-api-based-relevancy-training). Wait till the document is ingested.
+- Upload the document under docs folder of the cloned [repository](https://github.com/IBM/improve-discovery-results-using-api-based-relevancy-training). Wait till the document is ingested. It may take sometime.
 
-- Navigate to the discovery instance that you created and imported the data to. Login to `IBM Cloud` -> `Resource list` -> `Services` -> `Discovery instance` -> `Launch Watson Discovery`.
+- Refresh the page.
 
-- Make a note of `Collection ID` and `Environment ID`. They will be used in the code to call the Discovery service.
-
+- Make a note of `Collection ID` and `Environment ID`. They will be used in the code to call the Discovery service.  
   ![Collection Details](./images/collection-details.png)
 
   
-
+  
 - Click `Configure Data` on the top right corner.
 
   ![Configure Data](./images/configure-data.png)
@@ -102,7 +118,9 @@ With SDU, you annotate fields within your documents to train custom conversion m
 
   
 
-- When annotation is done for all the documents, click `Apply changes to collection`. When asked to upload document, upload the same document again.
+- After annotating each page click on `Submit` button.
+
+- When annotation is done for all the required pages in the document, click `Apply changes to collection`. When asked to upload document, upload the same document again.
 
 - Click on `Manage fields` tab. Select the fields that are needed. Under `Improve query results by splitting your documents` select the field, `subtitle`, for splitting the document.
 
@@ -112,31 +130,12 @@ With SDU, you annotate fields within your documents to train custom conversion m
 
 - Again, click `Apply changes to collection`. When asked to upload document, upload the same document again.
 
-- After a few minutes, the total number of documents should be changed from 1 to anything about more than 100 depending on the subtitles that you have marked.
+- Wait for a few minutes and refresh the page. The total number of documents should be changed from 1 to anything about more than 100 depending on the subtitles that you have marked.
 
-  Now that the documents are ingested, we can do natural language query and get results. Querying can be done either using the web interface or using APIs. Refer [Discovery APIs](https://cloud.ibm.com/apidocs/discovery/discovery) for more details on APIs.
+  Now that the documents are ingested, we can do natural language query and get results. Subsequent steps will show how to query.
   
-  
 
-## 3. Get the code 
 
-- Clone the repo using the below command on a terminal window.
-
-	```
-	git clone git@github.com:IBM/improve-discovery-results-using-api-based-relevancy-training.git
-	```
-
-- Change directory to the cloned repo using the command
-
-  ```
-  cd improve-discovery-results-using-api-based-relevancy-training
-  ```
-
-  And open the file named `DiscoveryDetails.py` in edit mode.
-
-- Edit file named `DiscoveryDetails.py` and update `apikey`, `url`, `collection_id`, `environment_id` which were noted down in earlier steps. Save the file.
-
-  
 
 ## 4. Relevance Training
 
@@ -274,7 +273,7 @@ Ensure that the training status shows values as shown in below image.
 
 Ensure that `Processing` field should be `false`, `available`field should be `true`, meaning that the processing is completed. 
 
-Now check if the documents retrieved for queries are as per relevance scores updated. We will run the same query that we had run earlier and see if the documents marked as relevant have been prioritised in the result for the query. We will notice that documents marked with higher relevance scores are prioritised. Note that this may not be always true since Watson uses training data to learn patterns and to generalize, not to memorize individual training queries. If that is the case then more training might help learn the model and get desired output.
+Now check if the documents retrieved for queries are as per relevance scores updated. We will run the same query that we had run earlier and see if the documents marked as relevant have been prioritised in the result for the query. We will notice that documents marked with higher relevance scores are prioritised. Note that this may not be always true since Watson uses training data to learn patterns and to generalise, not to memorise individual training queries. If that is the case then more training might help learn the model and get desired output.
 
 ![After Improvisation](./images/after-improvisation.png)
 
