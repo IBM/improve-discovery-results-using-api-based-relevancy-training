@@ -71,7 +71,7 @@ with open("./training_file.tsv",'r') as training_doc:
         i = 1 
         for j in range(1, noOfExamples + 1):
             example_obj = {}
-            if( row[i+2] == ""):
+            if( row[i+2] and row[i+2].strip() == ""):
                 row[i+2] = 0
             example_obj["relevance"] = row[i+2]
             example_obj["document_id"] = row[i]
