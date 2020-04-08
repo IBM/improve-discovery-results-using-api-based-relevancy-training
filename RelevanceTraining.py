@@ -1,7 +1,6 @@
 import json
 import csv
 import requests
-import ibm_boto3
 from requests.auth import HTTPBasicAuth
 import DiscoveryDetails as dt
 from ibm_cloud_sdk_core.api_exception import ApiException
@@ -30,9 +29,9 @@ def create_training_example(query_id, document_id, relevance):
 def training_post(training_obj):
     nlQuery = training_obj["natural_language_query"]
     examples = training_obj["examples"]
-    r = None
+    add_training_data_result = None
     try:
-        r = dt.discovery.add_training_data(dt.environment_id, dt.collection_id, natural_language_query=nlQuery, filter=None, examples=examples)
+        add_training_data_result = dt.discovery.add_training_data(dt.environment_id, dt.collection_id, natural_language_query=nlQuery, filter=None, examples=examples)
     except ApiException as apiE:
         # Check if the query already exists
         try:
