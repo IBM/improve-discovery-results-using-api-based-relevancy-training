@@ -1,5 +1,3 @@
-# Work-in-progress
-
 # Improve Watson Discovery Results using API based Relevancy Training
 
 Developers use the IBM Watson Discovery service to rapidly add a cognitive, search, and content analytics engine to applications. With that engine, they can identify patterns, trends, and insights from unstructured data that drive better decision making. With Watson Discovery, you can *ingest* (convert, enrich, clean, and normalize), store, and query data to extract actionable insights. In order to search and query, you need content that is injected and persisted in collections. You can learn more about developing applications with Watson Discovery by studying the [Cognitive discovery reference architecture](https://www.ibm.com/cloud/architecture/architectures/cognitiveDiscoveryDomain). 
@@ -172,12 +170,12 @@ This command queries Discovery for every question appearing in `Questions.txt` f
 
 Ensure that  `training_file.tsv` is created and has required data. 
 
-Before we further train Discovery, let us make a note of the results that Discovery provides, by default. For this run a sample natural language query in Discovery tool. A sample query and it's results are as in following image. Later we will mark these documents/results as relevant or not relevant and we will see that if the documents retrieved for this query is as per we marked them.
+Before we further train Discovery, let us make a note of the results that Discovery provides, by default. For this run a sample natural language query in Discovery tool. Navigate to `Watson Discover Dasboard` > `your collection` > `Build your own query`. A sample query and it's results are as in following image. Note that we are referring to the label `results` in the response and not the label `passages`. Later we will mark these documents/results as relevant or not relevant and we will see that if the documents retrieved for this query is as per we marked them. Make a note of document ids here. 
 
 ![Before Improvisation](./images/before-improvisation.png)
 
 
-### 4.2 Assign/update relevance scores
+### 4.2 Assign relevance scores
 
 **Relevance Score**: The relevance score for each training query must be a non-negative integer, for example `0` to represent *not relevant*, `1` to represent *somewhat relevant*, and `2` to represent *highly relevant*. However, for maximum flexibility, the service accepts non-negative integers between `0` and `100` for advanced users experimenting with different scoring schemes. Regardless of the range you use, the largest integer in the set of training queries indicates maximum relevance.
 
@@ -218,7 +216,7 @@ python CheckStatus.py
 You will see output similar to
 
 ```
-Muralidhars-MacBook-Pro-2:improve-discovery-results-using-api-based-relevancy-training muralidhar$ python CheckStatus.py
+$ python CheckStatus.py
 {
   "collection_id": "e0xxxx-xxx-xxxx-xxxx-xxxxxxxx236",
   "name": "Relevance",
@@ -282,6 +280,8 @@ Now check if the documents retrieved for queries are as per relevance scores upd
 ## 5. Conclusion
 
 You can train Discovery to improve the relevance of query results for your particular organization or subject area. For a fewer set of queries it can be achieved using Watson Discovery tooling. However, for a large set of queries, it is better to use APIs to achieve this. In this code pattern we used Watson discovery collection with the default training and Python code to to send requests and process responses. We queried, with about 147 queries. The responses were recorded is a TSV file. Then the responses were marked with relevancy score. Discovery collection was trained again with new relevancy scores and we saw the impact on how results were prioritized.
+
+
 
 # Related Links
 
