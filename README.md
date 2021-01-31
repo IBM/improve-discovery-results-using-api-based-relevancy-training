@@ -170,6 +170,8 @@ This command queries Discovery for every question appearing in `Questions.txt` f
 
 Ensure that  `training_file.tsv` is created and has required data. 
 
+>> You might encounter an error (And will be logged as part of running the Query.py) `It is required that you pass in a value for the "algorithms" argument when calling decode()` then the issue could be due to PyJWT version. Check your PyJWT version, if it is > 2.0.0, then downgrade the version to <2.0.0 and try. This should fix the above error.
+
 Before we further train Discovery, let us make a note of the results that Discovery provides, by default. For this run a sample natural language query in Discovery tool. Navigate to `Watson Discover Dasboard` > `your collection` > `Build your own query`. A sample query and it's results are as in following image. Note that we are referring to the label `results` in the response and not the label `passages`. Later we will mark these documents/results as relevant or not relevant and we will see that if the documents retrieved for this query is as per we marked them. Make a note of document ids here. 
 
 ![Before Improvisation](./images/before-improvisation.png)
