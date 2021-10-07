@@ -1,25 +1,19 @@
-from ibm_watson import DiscoveryV1
-from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
 from requests.auth import HTTPBasicAuth
 from ibm_cloud_sdk_core.api_exception import ApiException
+from ibm_watson import DiscoveryV2
+from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
 
-
-apikey = 'xxxxxxxxxxxx-xxxxxxxxxxxx-xxxxxxxxxx'
-collection_id = 'xxxxxxx-xxxx-xxxx-xxxx-xxxxxxxx'
-environment_id = 'xxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxx'
-url = 'https://api.xxxx.xxxxx.xxxx.cloud.ibm.com/instances/bcxxxxx-xxxx-xxxx-xxxx-xxxxxxxx824'
-version = '2019-04-30'
+apikey = 'xxxxx_xxxxxxxxxxxxxxxxxxx_xxxxx'
+project_id = 'xxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxx'
+collection_id = 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxx'
+url = 'https://api.xxxx.discovery.watson.cloud.ibm.com/instances/xxxxxxxxxxxx'
+version = 'xxxxxxxx'
 
 
 authenticator = IAMAuthenticator(apikey)
-auth = HTTPBasicAuth('apikey', apikey)
-discovery = DiscoveryV1(
+discovery = DiscoveryV2(
     version=version,
     authenticator=authenticator
 )
 
-headers = {
-    'content-type': "application/json"
-    }
-    
-discovery.set_service_url(url)
+discovery.set_service_url('https://api.xxxxx.discovery.watson.cloud.ibm.com')
